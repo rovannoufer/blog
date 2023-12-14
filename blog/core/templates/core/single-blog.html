@@ -3,17 +3,31 @@
 
 {% block content %}
 
-<img src="{{ blog.featured_image.url }}" width="100px" height="800px">
-<p> Single project</p>
-<h1>{{ blog.title }}</h1>
-<hr> 
-{% for tag in tags %}
-<span style="border: 1px solid gray;">{{tag}}</span>
-{% endfor %}
-<hr>
-<br>
+<main class="singleProject my-md">
+    <div class="container">
+        <div class="layout">
+            <div class="column column--1of3">
+                <h3 class="singleProject__subtitle">Tools & Stacks</h3>
+                <div class="singleProject__toolStack">
+                    {% for tag in blog.tags.all %}
+                    <span class="tag tag--pill tag--sub tag--lg">
+                        <small>{{tag}}</small>
+                    </span>
+                    {% endfor %}
 
-<p> {{ blog.description }} </p>
+                </div>
 
-
+            </div>
+            <div class="column column--2of3">
+                <img class="singleProject__preview" src="{{ blog.featured_image.url }}" alt="blog thumbnail" />
+                
+                <h2 class="singleProject__title">{{blog.title}}</h2>
+                <h3 class="singleProject__subtitle">About the BLOG</h3>
+                <div class="singleProject__info">
+                    {{blog.description}}
+                </div>
+        </div>
+    </div>
+    </div>
+</main>
 {% endblock %}
