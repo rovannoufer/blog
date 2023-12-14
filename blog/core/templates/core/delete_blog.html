@@ -1,0 +1,14 @@
+{% extends 'core/base.html' %}
+
+
+{% block content %}
+
+<form >
+    <p> Are you sure want to delete "{{ blogs }}"</p>
+    <a href="{% url 'blogs' %}">
+    Go BACK
+        
+    </a>
+    <input type="submit" value="Confirm"/>
+</form>
+{% endblock %}

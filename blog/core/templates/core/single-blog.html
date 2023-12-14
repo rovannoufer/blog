@@ -1,0 +1,19 @@
+{% extends 'core/base.html' %}
+
+
+{% block content %}
+
+<img src="{{ blog.featured_image.url }}" width="100px" height="800px">
+<p> Single project</p>
+<h1>{{ blog.title }}</h1>
+<hr> 
+{% for tag in tags %}
+<span style="border: 1px solid gray;">{{tag}}</span>
+{% endfor %}
+<hr>
+<br>
+
+<p> {{ blog.description }} </p>
+
+
+{% endblock %}
