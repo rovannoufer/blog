@@ -3,6 +3,7 @@ from .models import Project, Tag
 from .forms import BlogForm
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 def blogs(request):
     search_query = ''
@@ -15,7 +16,30 @@ def blogs(request):
         Q(title__icontains = search_query) | Q(description__icontains = search_query) 
         | Q(owner__name__icontains = search_query) | Q(tags__in =tags))
     
-    context = {'blogs': blogs}
+    page = request.GET.get('page')
+    results = 3
+    
+    paginator = Paginator(blogs, results)
+    
+    try:
+       blogs = paginator.page(page)
+    except PageNotAnInteger:
+        page = 1
+        blogs = paginator.page(page)
+    except EmptyPage:
+        page = paginator.num_pages
+        blogs = paginator.page(page)   
+
+    left_index = (int(page) - 4)
+    if left_index < 1:
+        left_index = 1
+
+    right_index = (int(page) + 5)
+    if right_index > paginator.num_pages:
+        rightindex = paginator.num_pages + 1
+
+    custom_range = range(left_index,right_index)
+    context = {'blogs': blogs, 'paginator': paginator, 'custom_range': custom_range}
     return render(request, 'core/blogs.html', context)
 
 def blog_project(request, pk):

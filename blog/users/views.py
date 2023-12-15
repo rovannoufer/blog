@@ -3,9 +3,10 @@ from .models import Profile, Skill
 from django.contrib.auth.models import User
 from django.contrib import auth
 from django.contrib import messages
+from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from .forms import ProfileForm, SkillForm
- 
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 def profiles(request):
 
@@ -17,8 +18,32 @@ def profiles(request):
     profiles = Profile.objects.distinct().filter(
         Q(name__icontains = search_query) | Q(short_intro__icontains = search_query) | Q(skill__in = skills) )
     
+
+    page = request.GET.get('page')
+    results = 3
     
-    context = {'profiles': profiles}
+    paginator = Paginator(profiles, results)
+    
+    try:
+       profiles = paginator.page(page)
+    except PageNotAnInteger:
+        page = 1
+        profiles = paginator.page(page)
+    except EmptyPage:
+        page = paginator.num_pages
+        profiles = paginator.page(page)   
+
+    left_index = (int(page) - 4)
+    if left_index < 1:
+        left_index = 1
+
+    right_index = (int(page) + 5)
+    if right_index > paginator.num_pages:
+        rightindex = paginator.num_pages + 1
+
+    custom_range = range(left_index,right_index)
+    
+    context = {'profiles': profiles, 'paginator': paginator, 'custom_range': custom_range}
     return render(request, 'users/profiles.html', context)
 
 
