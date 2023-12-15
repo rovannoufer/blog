@@ -5,7 +5,7 @@ from django.contrib import auth
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import ProfileForm, SkillForm
-from django.db.models import Q
+ 
 
 def profiles(request):
 

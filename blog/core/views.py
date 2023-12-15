@@ -1,10 +1,20 @@
 from django.shortcuts import render, redirect
-from .models import Project
+from .models import Project, Tag
 from .forms import BlogForm
+from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 
 def blogs(request):
-    blogs = Project.objects.all()
+    search_query = ''
+    if request.GET.get('search_query'):
+        search_query = request.GET.get('search_query')
+
+    tags = Tag.objects.filter(name__icontains=search_query)
+    
+    blogs = Project.objects.distinct().filter(
+        Q(title__icontains = search_query) | Q(description__icontains = search_query) 
+        | Q(owner__name__icontains = search_query) | Q(tags__in =tags))
+    
     context = {'blogs': blogs}
     return render(request, 'core/blogs.html', context)
 

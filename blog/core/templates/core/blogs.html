@@ -11,9 +11,9 @@
             </div>
 
             <div class="hero-section__search">
-                <form id='searchForm' class="form" action="/" method="get">
+                <form id='searchForm' class="form" action="{% url 'blogs' %}" method="get">
                     <div class="form__field">
-                        <label for="formInput#search">Search By Projects </label>
+                        
                         <input class="input input--text" id="formInput#search" type="text" name="search_query"
                             placeholder="Search by Blog Title" value="{{search_query}}" />
                     </div>
