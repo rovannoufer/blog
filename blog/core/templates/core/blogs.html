@@ -31,9 +31,12 @@
                 <div class="column">
                     <div class="card project">
                         <a href="{% url 'blog' blog.id %}" class="project">
-                            <img class="project__thumbnail" src="{{ blog.featured_image }}" alt="project thumbnail" />
+                            <img class="project__thumbnail" src="{{ blog.featured_image.url }}" alt="blog thumbnail" />
                             <div class="card__body">
                                 <h3 class="project__title">{{blog.title}}</h3>
+                                <p><a class="project__author" href="#">By
+                                    {{blog.owner.name}}</a>
+                                </p>
                                 <p class="project--rating">
                                     {{blog.intro}}
                                 </p>
