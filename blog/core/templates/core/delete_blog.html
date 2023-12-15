@@ -3,12 +3,21 @@
 
 {% block content %}
 
-<form >
-    <p> Are you sure want to delete "{{ blogs }}"</p>
-    <a href="{% url 'blogs' %}">
-    Go BACK
-        
-    </a>
-    <input type="submit" value="Confirm"/>
-</form>
+<main class="formPage my-xl">
+    <div class="content-box">
+        <div class="formWrapper">
+
+            <br>
+
+            <form class="form" action="" method="POST">
+                {% csrf_token %}
+                <p>Are you sure you want to delete "{{ blogs }}"?</p>
+
+                <a class="btn btn--sub btn--lg  my-md" href="{% url 'user_account' %}">Go Back</a>
+
+                <input class="btn btn--sub btn--lg  my-md" type="submit" value="Confirm" />
+            </form>
+        </div>
+    </div>
+</main>
 {% endblock %}

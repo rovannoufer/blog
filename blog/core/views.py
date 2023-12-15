@@ -15,12 +15,16 @@ def blog_project(request, pk):
 
 @login_required(login_url='login')
 def create_blog(request):
+    profile = request.user.profile
     form = BlogForm()
 
     if request.method == 'POST':
         form = BlogForm(request.POST)
+    
         if form.is_valid():
-            form.save()
+            project = form.save(commit=False)
+            project.owner = profile
+            project.save()
             return redirect('blogs')
         
     context = {'form': form}
@@ -28,7 +32,8 @@ def create_blog(request):
 
 @login_required(login_url='login')
 def update_blog(request, pk):
-    project = Project.objects.get(id=pk)
+    profile = request.user.profile
+    project = profile.project_set.get(id=pk)
     form = BlogForm(instance=project)
 
     if request.method == 'POST':
@@ -43,7 +48,8 @@ def update_blog(request, pk):
 
 @login_required(login_url='login')
 def delete_blog(request, pk):
-    blogs = Project.objects.get(id=pk)
+    profile = request.user.profile
+    blogs = profile.project_set.get(id=pk)
     if request.method == 'POST':
         blogs.delete()
         return redirect('blogs')
