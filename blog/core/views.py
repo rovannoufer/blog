@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
 from .models import Project, Tag
-from .forms import BlogForm
+from .forms import BlogForm, Review_form
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.contrib import messages
 
 def blogs(request):
     search_query = ''
@@ -45,7 +46,16 @@ def blogs(request):
 def blog_project(request, pk):
     blog_project_obj = Project.objects.get(id=pk)
     tags = blog_project_obj.tags.all()
-    return render(request, 'core/single-blog.html', {'blog': blog_project_obj, 'tags': tags})
+    form = Review_form()
+
+    if request.method == 'POST':
+        form = Review_form(request.POST)
+        review = form.save(commit=False)
+        review.project = blog_project_obj
+        review.owner = request.user.profile
+        review.save()
+        messages.success(request, 'Your review was successfully submitted!')
+    return render(request, 'core/single-blog.html', {'blog': blog_project_obj, 'tags': tags, 'form': form})
 
 @login_required(login_url='login')
 def create_blog(request):
