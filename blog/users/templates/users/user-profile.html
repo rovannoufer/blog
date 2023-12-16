@@ -14,7 +14,7 @@
                         <p class="dev__location">Based in {{profile.location}}</p>
                        
                         {% if request.user.profile.id != profile.id %}
-                        <a href="#" class="btn btn--sub btn--lg">Send Message </a>
+                        <a href="{% url 'create_message' profile.id %}" class="btn btn--sub btn--lg">Send Message </a>
                         {% endif %}
                     </div>
                 </div>
